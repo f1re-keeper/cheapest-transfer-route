@@ -8,14 +8,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.File;
+import java.io.IOException;
 
 @RestController
 public class TransferController {
     private final TransferService transferService;
+    private final ObjectMapper objectMapper;
 
     @Autowired
     public TransferController(TransferService transferService) {
         this.transferService = transferService;
+        this.objectMapper = new ObjectMapper();
     }
 
     @GetMapping("/getBestRoute")
@@ -25,7 +31,13 @@ public class TransferController {
 
     @PostMapping("/input")
     public ResponseEntity<Void> chosenRoute(@RequestBody Route request) {
-        transferService.processRequest(request);
-        return ResponseEntity.ok().build();
+        try {
+            objectMapper.writeValue(new File("data.json"), request);
+            transferService.processRequest(request);
+            return ResponseEntity.ok().build();
+        }catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }

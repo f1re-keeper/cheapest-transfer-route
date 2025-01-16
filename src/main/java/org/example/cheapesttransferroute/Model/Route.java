@@ -11,5 +11,5 @@ import java.util.*;
 @Setter
 public class Route {
     private int maxWeight;
-    private List<Transfer> transfers;
+    private List<Transfer> availableTransfers;
 }

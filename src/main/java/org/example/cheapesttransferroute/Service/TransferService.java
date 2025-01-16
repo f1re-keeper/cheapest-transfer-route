@@ -15,7 +15,7 @@ public class TransferService {
     }
 
     public void processRequest(Route req){
-        List<Transfer> available = req.getTransfers();
+        List<Transfer> available = req.getAvailableTransfers();
         for(Transfer transfer : available){
             transferRep.createTransfer(transfer);
         }
