@@ -1,6 +1,7 @@
 package org.example.cheapesttransferroute.Repository;
 
 import lombok.Setter;
+import org.example.cheapesttransferroute.Model.Route;
 import org.example.cheapesttransferroute.Model.Transfer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -42,5 +43,13 @@ public class TransferRep {
         }
         maxWeight = it.next();
         return maxWeight;
+    }
+
+    public void saveStorage(Route req){
+        storage.updateData(req);
+    }
+
+    public void clearStorage() {
+        storage.clearData();
     }
 }

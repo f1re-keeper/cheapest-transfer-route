@@ -1,13 +1,17 @@
 package org.example.cheapesttransferroute.Service;
 
+import org.example.cheapesttransferroute.ErrorHandlers.ValidationExceptionHandler;
 import org.example.cheapesttransferroute.Repository.TransferRep;
 import org.example.cheapesttransferroute.Model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
 public class TransferService {
+    private static final Logger logger = LoggerFactory.getLogger(TransferService.class);
     private TransferRep transferRep;
 
     public TransferService(TransferRep transferRep) {
@@ -20,9 +24,21 @@ public class TransferService {
             transferRep.createTransfer(transfer);
         }
         transferRep.setMaxWeight(req.getMaxWeight());
+        logger.info("Processing complete");
+    }
+
+    public void saveData(Route req){
+        transferRep.saveStorage(req);
+        logger.info("Saving complete");
+    }
+
+    public void clearData() {
+        transferRep.clearStorage();
+        logger.info("Clearing complete");
     }
 
     public CheapestRoute findCheapestRoute() {
+        logger.info("Using Knapsack Algorithm to find the cheapest route");
         int maxWeight = transferRep.getMaxWeight();
         List<Transfer> transferList = transferRep.getAllTransfers();
 
@@ -65,6 +81,7 @@ public class TransferService {
         ans.setTotalCost(totalCost);
         ans.setTotalWeight(totalWeight);
 
+        logger.info("Cheapest route: " + ans.toString());
         return ans;
     }
 }
