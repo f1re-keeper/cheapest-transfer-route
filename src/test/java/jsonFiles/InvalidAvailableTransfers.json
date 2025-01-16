@@ -1,0 +1,22 @@
+{
+  "maxWeight": 24,
+  "availableTransfers":
+  [
+    {
+      "weight": -5,
+      "cost": -10
+    },
+    {
+      "weight": 10,
+      "cost": 20
+    },
+    {
+      "weight": 3,
+      "cost": 5
+    },
+    {
+      "weight": 8,
+      "cost": 15
+    }
+  ]
+}

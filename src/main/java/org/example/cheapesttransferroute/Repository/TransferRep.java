@@ -1,5 +1,6 @@
 package org.example.cheapesttransferroute.Repository;
 
+
 import lombok.Setter;
 import org.example.cheapesttransferroute.Model.Route;
 import org.example.cheapesttransferroute.Model.Transfer;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class TransferRep {
+public class TransferRep{
     @Setter
     private int maxWeight;
     private List<Transfer> availableTransfers = new ArrayList<>();

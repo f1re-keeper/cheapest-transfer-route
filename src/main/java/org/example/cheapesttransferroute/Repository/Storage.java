@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.Getter;
+import lombok.Setter;
 import org.example.cheapesttransferroute.ErrorHandlers.ValidationExceptionHandler;
 import org.example.cheapesttransferroute.Model.*;
 import org.slf4j.Logger;
@@ -20,7 +21,8 @@ import java.util.*;
 @Component
 public class Storage {
     private static final Logger logger = LoggerFactory.getLogger(Storage.class);
-    private final String jsonPath = "src/main/resources/data.json";
+    @Setter
+    private String jsonPath = "src/main/resources/data.json";
     @Getter
     private final Map<Integer, List<Transfer>> data = new HashMap<>();
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -81,9 +83,11 @@ public class Storage {
     }
 
     public void updateData(Route route) {
+        logger.info("Updating data");
         data.clear();
         data.put(route.getMaxWeight(), route.getAvailableTransfers());
         saveToFile(route);
+        logger.info("Update complete");
     }
 
     private void saveToFile(Route route) {
