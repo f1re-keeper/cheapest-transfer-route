@@ -2,6 +2,7 @@ package org.example.cheapesttransferroute.Repository;
 
 import lombok.Setter;
 import org.example.cheapesttransferroute.Model.Transfer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -15,8 +16,8 @@ public class TransferRep {
     private int maxWeight;
     private List<Transfer> availableTransfers = new ArrayList<>();
 
+    @Autowired
     private Storage storage;
-
     public void TransferRep(Storage storage) {
         this.storage = storage;
     }
@@ -33,21 +34,12 @@ public class TransferRep {
         return availableTransfers;
     }
 
-    public Transfer getTransfer(int transferId){
-        Map<Integer, List<Transfer>> data = storage.getData();
-        for(List<Transfer> value: data.values()){
-            List<Transfer> transferList = value;
-
-            if(transferId < transferList.size() && transferId >= 0){
-                return transferList.get(transferId);
-            }
-        }
-        return null;
-    }
-
     public int getMaxWeight(){
         Map<Integer, List<Transfer>> data = storage.getData();
         Iterator<Integer> it = data.keySet().iterator();
+        if (data.isEmpty()) {
+            return 0;
+        }
         maxWeight = it.next();
         return maxWeight;
     }

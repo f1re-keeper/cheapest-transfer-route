@@ -26,13 +26,14 @@ public class TransferController {
 
     @GetMapping("/getBestRoute")
     public ResponseEntity<CheapestRoute> getBestRoute() {
+        System.out.println("getBestRoute");
         return ResponseEntity.ok(transferService.findCheapestRoute());
     }
 
     @PostMapping("/input")
     public ResponseEntity<Void> chosenRoute(@RequestBody Route request) {
         try {
-            objectMapper.writeValue(new File("data.json"), request);
+            objectMapper.writeValue(new File("src/main/resources/data.json"), request);
             transferService.processRequest(request);
             return ResponseEntity.ok().build();
         }catch (IOException e) {
