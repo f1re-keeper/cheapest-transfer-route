@@ -1,6 +1,5 @@
 package org.example.cheapesttransferroute.Service;
 
-import org.example.cheapesttransferroute.ErrorHandlers.ValidationExceptionHandler;
 import org.example.cheapesttransferroute.Repository.TransferRep;
 import org.example.cheapesttransferroute.Model.*;
 import org.slf4j.Logger;
@@ -39,7 +38,7 @@ public class TransferService {
 
     public CheapestRoute findCheapestRoute() {
         logger.info("Using Knapsack Algorithm to find the cheapest route");
-        int maxWeight = transferRep.getMaxWeight();
+        int maxWeight = transferRep.getMaxWeightFromStorage();
         List<Transfer> transferList = transferRep.getAllTransfers();
 
         CheapestRoute ans = new CheapestRoute();

@@ -1,6 +1,7 @@
 package org.example.cheapesttransferroute.Repository;
 
 
+import lombok.Getter;
 import lombok.Setter;
 import org.example.cheapesttransferroute.Model.Route;
 import org.example.cheapesttransferroute.Model.Transfer;
@@ -15,12 +16,15 @@ import java.util.Map;
 @Repository
 public class TransferRep{
     @Setter
+    @Getter //this setter and getter are for tests
     private int maxWeight;
+
+    @Getter //this getter is for tests
     private List<Transfer> availableTransfers = new ArrayList<>();
 
     @Autowired
     private Storage storage;
-    public void TransferRep(Storage storage) {
+    public TransferRep(Storage storage) {
         this.storage = storage;
     }
 
@@ -30,13 +34,14 @@ public class TransferRep{
 
     public List<Transfer> getAllTransfers(){
         Map<Integer, List<Transfer>> data = storage.getData();
+        availableTransfers.clear();
         for(List<Transfer> value : data.values()){
             availableTransfers.addAll(value); //Map "data" only has one entry
         }
         return availableTransfers;
     }
 
-    public int getMaxWeight(){
+    public int getMaxWeightFromStorage(){
         Map<Integer, List<Transfer>> data = storage.getData();
         Iterator<Integer> it = data.keySet().iterator();
         if (data.isEmpty()) {

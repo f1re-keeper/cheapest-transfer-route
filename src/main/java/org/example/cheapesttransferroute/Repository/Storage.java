@@ -10,6 +10,7 @@ import org.example.cheapesttransferroute.Model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,16 +20,25 @@ import java.nio.file.Paths;
 import java.util.*;
 
 @Component
+@Validated(ValidationExceptionHandler.class)
 public class Storage {
     private static final Logger logger = LoggerFactory.getLogger(Storage.class);
-    @Setter
+    @Setter //this setter is for tests, but for the application jsonPath should always have the initial value
     private String jsonPath = "src/main/resources/data.json";
-    @Getter
+    @Getter //this getter is for tests
     private final Map<Integer, List<Transfer>> data = new HashMap<>();
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    @Setter //this setter is also for tests
+    private ObjectMapper objectMapper = new ObjectMapper();
 
+
+    public Storage(String typeOfStorage){
+        //this string can be anything. the goal of this constructor is to initialize
+        //an empty Storage object. This is used for tests
+        objectMapper.registerModule(new JavaTimeModule());
+    }
 
     public Storage() {
+        objectMapper.registerModule(new JavaTimeModule());
         init();
     }
 
@@ -41,9 +51,7 @@ public class Storage {
 
         try {
             String fileData = new String(Files.readAllBytes(Paths.get(jsonPath)));
-            ObjectMapper objMapper = new ObjectMapper();
-            objMapper.registerModule(new JavaTimeModule());
-            Map<String, Object> jsonData = objMapper.readValue(fileData, new TypeReference<Map<String, Object>>() {});
+            Map<String, Object> jsonData = objectMapper.readValue(fileData, new TypeReference<Map<String, Object>>() {});
 
             Integer maxWeight = (Integer) jsonData.get("maxWeight");
             if (maxWeight == null) {
@@ -87,15 +95,14 @@ public class Storage {
         data.clear();
         data.put(route.getMaxWeight(), route.getAvailableTransfers());
         saveToFile(route);
-        logger.info("Update complete");
     }
 
     private void saveToFile(Route route) {
         try {
-            ObjectMapper objMapper = new ObjectMapper();
-            objMapper.registerModule(new JavaTimeModule());
-            objMapper.writeValue(new File(jsonPath), route);
+            objectMapper.writeValue(new File(jsonPath), route);
+            logger.info("Update complete");
         } catch (IOException e) {
+            logger.info("Error saving JSON file", e);
             e.printStackTrace();
         }
     }
