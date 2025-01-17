@@ -3,6 +3,7 @@ package org.example.cheapesttransferroute;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.example.cheapesttransferroute.Model.Route;
@@ -26,6 +27,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class TestStorage{
     private Storage storage;
@@ -40,9 +42,31 @@ public class TestStorage{
     @Test
     public void testDefaultConstructor() throws IOException {
         storage = new Storage();
+
+        //We need to get the value of maxWeight from the default file,
+        //otherwise we would have to change the data.json file every time before we ran this test
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode rootNode = mapper.readTree(new File("src/main/resources/data.json"));
+        String maxWeightStr = Optional.ofNullable(rootNode.get("maxWeight"))
+                .map(JsonNode::asText)
+                .orElse(null);
+
+        int maxWeight = 0;
+        if(maxWeightStr != null){
+            maxWeight = Integer.parseInt(maxWeightStr);
+        }
+
         assertEquals(1, storage.getData().size());
-        assertTrue(storage.getData().containsKey(15));
-        assertEquals(4, storage.getData().get(15).size());
+        assertTrue(storage.getData().containsKey(maxWeight));
+    }
+
+    @Test
+    public void testInitWithException() throws IOException {
+        storage.setJsonPath("src/test/java/jsonFiles/InvalidFile.json");
+        storage.init();
+        assertEquals(1, storage.getData().size());
+        assertTrue(storage.getData().containsKey(0));
+        assertTrue(storage.getData().get(0).isEmpty());
     }
 
     @Test
@@ -60,7 +84,6 @@ public class TestStorage{
 
     @Test
     public void testInitWithFullFile() throws IOException {
-        // Create test JSON file with valid data
         String validJson = "src/test/java/jsonFiles/ValidCase.json";
 
         storage.setJsonPath(validJson);
@@ -84,7 +107,6 @@ public class TestStorage{
 
     @Test
     public void testClearData() throws IOException {
-        // First initialize with valid data
         String clearFile = "src/test/java/jsonFiles/ClearAndUpdate.json";
 
         storage.setJsonPath(clearFile);
@@ -117,8 +139,6 @@ public class TestStorage{
         assertTrue(storage.getData().containsKey(200));
         assertEquals(1, storage.getData().get(200).size());
 
-
-        //Verifying if the file content actually changed
         storage = new Storage("Initializing Empty Storage");
         storage.setJsonPath(updateFile);
         storage.init();

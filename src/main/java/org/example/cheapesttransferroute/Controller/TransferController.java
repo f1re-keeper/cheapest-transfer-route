@@ -30,7 +30,7 @@ public class TransferController {
         this.objectMapper = new ObjectMapper();
     }
 
-    @GetMapping("/getBestRoute")
+    @GetMapping(value = "/getBestRoute", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CheapestRoute> getBestRoute() {
         logger.info("Getting the cheapest route");
         return ResponseEntity.ok(transferService.findCheapestRoute());
@@ -50,4 +50,6 @@ public class TransferController {
             throw e;
         }
     }
+
+
 }

@@ -66,8 +66,8 @@ public class Storage {
             }
 
             data.put(maxWeight, transfers);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
             data.put(0, new ArrayList<>());
         }
     }

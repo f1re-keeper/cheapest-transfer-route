@@ -31,7 +31,7 @@ public class TestTransferRep {
         Transfer transfer = new Transfer();
         transferRep.createTransfer(transfer);
 
-        List<Transfer> result = transferRep.getAllTransfers();
+        List<Transfer> result = transferRep.getAvailableTransfers();
         assertTrue(result.contains(transfer));
     }
 
@@ -56,6 +56,7 @@ public class TestTransferRep {
         assertEquals(1, storage.getData().size());
         assertTrue(storage.getData().containsKey(200));
         assertEquals(1, storage.getData().get(200).size());
+        assertEquals(1, transferRep.getAllTransfers().size());
     }
 
     @Test
