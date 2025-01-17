@@ -1,15 +1,17 @@
 # Cheapest Transfer Route
-This Spring Boot application finds the combination of transfers for a given route that has the maximal total cost while ensuring that the total package weight stays within a given limit.
-The application uses the Knapsack Algorithm.
-
-Made by Elene Kvitsiani
 
 ## Table of Contents
-1. [Project Description](#project-description)
+1. [About Application](#about-application)
 2. [Setup](#setup)
 3. [API Endpoints](#api-endpoints)
 4. [Testing](#testing)
 5. [CURL Requests](#curl-requests)
+
+## About Application
+This Spring Boot application finds the combination of transfers for a given route that has the maximal total cost while ensuring that the total package weight stays within a given limit.
+The application uses the Knapsack Algorithm.
+
+Made by Elene Kvitsiani
 
 ## Setup
 
