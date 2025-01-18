@@ -58,7 +58,7 @@ Gives the solution to the given problem:
 ```
 **Response:**
 ```
-200 OK
+HTTP/1.1 200 OK
 ```
 
 ### POST: /api/requestInput
