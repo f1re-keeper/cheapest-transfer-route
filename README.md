@@ -113,8 +113,9 @@ Omit `i` if you don't want response headers
 
 ### POST
 ```
-curl -i -X POST http://localhost:8000/api/requestInput \-H "Content-Type: application/json" -d \
-'{
+curl -i -X POST http://localhost:8000/api/requestInput \
+-H "Content-Type: application/json" \
+-d'{
   "maxWeight": 15,
   "availableTransfers":
   [
